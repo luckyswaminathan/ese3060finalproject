@@ -191,22 +191,39 @@ class Conv(nn.Conv2d):
 class ConvGroup(nn.Module):
     def __init__(self, channels_in, channels_out, batchnorm_momentum):
         super().__init__()
-        self.conv1 = Conv(channels_in,  channels_out)
-        self.pool = nn.MaxPool2d(2)
+        self.conv1 = Conv(channels_in,  channels_out) 
+        self.pool  = nn.MaxPool2d(2)            
         self.norm1 = BatchNorm(channels_out, batchnorm_momentum)
+
         self.conv2 = Conv(channels_out, channels_out)
         self.norm2 = BatchNorm(channels_out, batchnorm_momentum)
         self.activ = nn.GELU()
 
+        self.downsample = nn.Sequential(
+            nn.MaxPool2d(2),  # 31 -> 15, 15 -> 7, 7 -> 3 ...
+            nn.Conv2d(channels_in, channels_out, kernel_size=1, stride=1, bias=False),
+            BatchNorm(channels_out, batchnorm_momentum),
+        )
+
     def forward(self, x):
-        x = self.conv1(x)
-        x = self.pool(x)
-        x = self.norm1(x)
-        x = self.activ(x)
-        x = self.conv2(x)
-        x = self.norm2(x)
-        x = self.activ(x)
-        return x
+        identity = x
+
+        out = self.conv1(x)
+        out = self.pool(out)
+        out = self.norm1(out)
+        out = self.activ(out)
+
+        out = self.conv2(out)
+        out = self.norm2(out)
+
+        identity = self.downsample(identity)
+
+        out = out + identity
+        out = self.activ(out)
+
+        return out
+
+
 
 #############################################
 #            Network Definition             #
