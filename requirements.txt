@@ -1,6 +1,5 @@
 numpy
 tqdm
 torch
-torchvision
 huggingface-hub
 kernels
