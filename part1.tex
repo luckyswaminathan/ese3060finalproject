@@ -52,7 +52,7 @@ The detailed experiment log, including commands and multiple runs, is provided i
 \section{Results \& Conclusions}
 
 In 5 runs, the baseline achieved an average of 94.01\% test accuracy with a runtime of roughly 1m 54.381s (real category in the logs).
-Over 5 runs, the modified version (``lucky'' variant) ran in an average of 1m 48.074s, which is roughly an 5.3\% reduction in wall-clock time, but its accuracy dropped slightly to around 92.74\% (a loss of about 1.3 percentage points compared to the baseline).
+Over 5 runs, the modified version (``modified'' variant) ran in an average of 1m 48.074s, which is roughly an 5.3\% reduction in wall-clock time, but its accuracy dropped slightly to around 92.74\% (a loss of about 1.3 percentage points compared to the baseline).
 
 These results partially support the hypothesis: the combination of precomputed transforms, residual connections, and hyperparameter / data-loading tweaks clearly reduces training time, and the accuracy remains very close to the original 94.0\% target.
 However, the small accuracy drop suggests there is still a trade-off between speed and performance.
@@ -76,7 +76,7 @@ initialization and reuse them across all epochs, eliminating redundant computati
 
 \textbf{What Changed:} Modified the \texttt{CifarLoader.\_\_init\_\_} method to precompute normalized
 images, flipped images, and padded images once during initialization (lines 135--150 in
-\texttt{airbench94-lucky.py}). The \texttt{\_\_iter\_\_} method now selects from these precomputed
+\texttt{airbench94-modified.py}). The \texttt{\_\_iter\_\_} method now selects from these precomputed
 tensors instead of recomputing them each epoch.
 
 \textbf{Solution:} All static transforms (normalization, flipping, padding) are computed once in the
@@ -100,7 +100,7 @@ improve training dynamics in deep networks.
 
 
 \textbf{What Changed:} Added a residual connection pathway to the \texttt{ConvGroup} class (in our
-modified \texttt{airbench94-lucky.py}). The residual path consists of a 1$\times$1 convolution to
+modified \texttt{airbench94-modified.py}). The residual path consists of a 1$\times$1 convolution to
 match channel dimensions, applied after pooling the identity tensor. The final output is the sum of
 the main path and the residual path, followed by activation.
 
