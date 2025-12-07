@@ -38,7 +38,7 @@ To test this hypothesis, we started from the provided \texttt{airbench94.py} bas
 
     \item \textbf{Hyperparameter changes.}
     We increased the batch size from 1024 to 1536 and scaled the learning rate from 11.5 to 17.25 (1.5$\times$, matching the batch-size change).
-    In the write-up I describe reducing the number of epochs (e.g., from 9.9 to 8.0) to trade a small loss in optimization for faster overall runtime.
+    We reduced the number of epochs (e.g., from 9.9 to 8.0) to trade a small loss in optimization for faster overall runtime.
     These changes are intended to better use GPU memory and reduce per-epoch overhead while keeping training dynamics similar.
 
     \item \textbf{Optimized data loading and device transfers.}
@@ -56,7 +56,7 @@ Over 5 runs, the modified version (``modified'' variant) ran in an average of 1m
 
 These results partially support the hypothesis: the combination of precomputed transforms, residual connections, and hyperparameter / data-loading tweaks clearly reduces training time, and the accuracy remains very close to the original 94.0\% target.
 However, the small accuracy drop suggests there is still a trade-off between speed and performance.
-In future iterations, I would tune the number of epochs and learning rate more finely (or add mild regularization changes) to see if I can recover the lost $\sim$1.3 percentage points while keeping most of the $\sim$5.3\% speed-up.
+In future iterations, we would tune the number of epochs and learning rate more finely (or add mild regularization changes) to see if we can recover the lost $\sim$1.3 percentage points while keeping most of the $\sim$5.3\% speed-up.
 
 
 
@@ -132,7 +132,7 @@ scale with batch size when using the same number of epochs.
 \subsection{Change 4: Optimized Data Loading Pipeline}
 
 \textbf{Hypothesis:} Moving data to GPU earlier and using non-blocking transfers can overlap data
-transfer with computation, reducing overall training time. Additionally, ensuring labels are
+transfer with computation, reducing overall training time. Also, ensuring labels are
 properly typed and on the correct device avoids runtime type conversions.
 
 \textbf{What Changed:} Modified data loading to use explicit device handling (line 100), convert
@@ -147,3 +147,4 @@ training begins, eliminating per-batch conversion overhead.
 
 
 \end{document}
+
