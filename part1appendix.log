@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  8 DEC 2025 14:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  8 DEC 2025 14:52
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/Users/luckyswaminathan/Desktop/ese-3060-project/part1.tex
-(/Users/luckyswaminathan/Desktop/ese-3060-project/part1.tex
+**/Users/luckyswaminathan/Desktop/ese-3060-project/part1appendix.tex
+(/Users/luckyswaminathan/Desktop/ese-3060-project/part1appendix.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls
@@ -147,8 +147,8 @@ LaTeX Info: Redefining \] on input line 2954.
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count287
 \l__pdf_internal_box=\box56
-) (./part1.aux)
-\openout1 = `part1.aux'.
+) (./part1appendix.aux)
+\openout1 = `part1appendix.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
@@ -239,36 +239,68 @@ Package grfext Info: Graphics extension search list:
  (/usr/local/texlive/2025/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 34.
+Overfull \hbox (55.02287pt too wide) in paragraph at lines 30--34
+\OT1/cmr/m/n/10.95 ages, flipped im-ages, and padded im-ages once dur-ing ini-tial-iza-tion (lines 135--150 in \OT1/cmtt/m/n/10.95 airbench94-modified.py\OT1/cmr/m/n/10.95 ).
+ []
 
-Overfull \hbox (2.56871pt too wide) in paragraph at lines 44--47
-[]\OT1/cmr/bx/n/10.95 Optimized data load-ing and de-vice trans-fers. \OT1/cmr/m/n/10.95 Im-ages are con-verted to the fi-nal dtype/layout
+
+Overfull \hbox (7.72511pt too wide) in paragraph at lines 41--46
+[]\OT1/cmr/m/n/10.95 flipped im-ages in \OT1/cmtt/m/n/10.95 self.proc[]images['flip']\OT1/cmr/m/n/10.95 , and padded im-ages in \OT1/cmtt/m/n/10.95 self.proc[]images['pad']\OT1/cmr/m/n/10.95 .
  []
 
 
 
 [1
 
-{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] (./part1.aux)
+{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<training_flow_baseline.png, id=12, 1004.0712pt x 1800.9684pt>
+File: training_flow_baseline.png Graphic file (type png)
+<use training_flow_baseline.png>
+Package pdftex.def Info: training_flow_baseline.png  used on input line 150.
+(pdftex.def)             Requested size: 375.80544pt x 674.06992pt.
+
+
+LaTeX Warning: Float too large for page by 49.36908pt on input line 152.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<training_flow_changes.png, id=14, 1004.0712pt x 1800.9684pt>
+File: training_flow_changes.png Graphic file (type png)
+<use training_flow_changes.png>
+Package pdftex.def Info: training_flow_changes.png  used on input line 158.
+(pdftex.def)             Requested size: 375.80544pt x 674.06992pt.
+
+LaTeX Warning: Float too large for page by 49.36908pt on input line 160.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+
+[2]
+
+[3 <./training_flow_baseline.png>]
+
+[4 <./training_flow_changes.png>] (./part1appendix.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 3708 strings out of 473190
- 58617 string characters out of 5715801
- 468489 words of memory out of 5000000
- 26931 multiletter control sequences out of 15000+600000
- 563673 words of font info for 53 fonts, out of 8000000 for 9000
+ 3724 strings out of 473190
+ 59213 string characters out of 5715801
+ 471497 words of memory out of 5000000
+ 26948 multiletter control sequences out of 15000+600000
+ 563937 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 59i,5n,67p,439b,243s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb>
-Output written on part1.pdf (1 page, 84542 bytes).
+ 59i,7n,67p,338b,241s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on part1appendix.pdf (4 pages, 2274243 bytes).
 PDF statistics:
- 39 PDF objects out of 1000 (max. 8388607)
- 23 compressed objects within 1 object stream
+ 52 PDF objects out of 1000 (max. 8388607)
+ 29 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
