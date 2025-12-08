@@ -38,7 +38,7 @@ To test this hypothesis, we started from the provided \texttt{airbench94.py} bas
 
     \item \textbf{Hyperparameter changes.}
     We increased the batch size from 1024 to 1536 and scaled the learning rate from 11.5 to 17.25 (1.5$\times$, matching the batch-size change).
-    We reduced the number of epochs (e.g., from 9.9 to 8.0) to trade a small loss in optimization for faster overall runtime.
+    We reduced the number of epochs from 9.9 to 8.0 to trade a small loss in optimization for faster overall runtime.
     These changes are intended to better use GPU memory and reduce per-epoch overhead while keeping training dynamics similar.
 
     \item \textbf{Optimized data loading and device transfers.}
