@@ -18,6 +18,16 @@ Install all required packages:
 pip install -r requirements.txt
 ```
 
+## Modified file
+
+File: `airbench94-modified.py`
+
+Key changes:
+- Precompute static image transforms (normalize, flip, pad) once in `CifarLoader.__init__`
+- Add residual connections in `ConvGroup` with a 1×1 downsample path
+- Adjust hyperparameters: epochs 9.9 → 8.0, batch 1024 → 1536, lr 11.5 → 17.25
+- Move data to GPU early with non-blocking transfers and channels-last layout
+
 ## Running airbench94.py
 
 ### Overview
