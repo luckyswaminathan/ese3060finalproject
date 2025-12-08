@@ -5,7 +5,6 @@
 \usepackage{titlesec}
 \usepackage{amsmath}
 
-% Make section headings a bit smaller & tighter
 \titleformat{\section}{\normalsize\bfseries}{\thesection}{0.6em}{}
 \titlespacing*{\section}{0pt}{1ex plus 0.2ex minus 0.2ex}{0.6ex}
 
@@ -29,8 +28,9 @@ initialization and reuse them across all epochs, eliminating redundant computati
 
 \textbf{What Changed:} Modified the \texttt{CifarLoader.\_\_init\_\_} method to precompute normalized
 images, flipped images, and padded images once during initialization (lines 135--150 in
-\texttt{airbench94-modified.py}). The \texttt{\_\_iter\_\_} method now selects from these precomputed
-tensors instead of recomputing them each epoch.
+\texttt{airbench94-modified.py}). The \texttt{\_\_iter\_\_} method uses these precomputed tensors and
+alternates horizontal mirroring by flipping the selected tensor every other epoch, instead of
+recomputing transforms each epoch.
 
 \textbf{Solution:} All static transforms (normalization, flipping, padding) are computed once in the
 \texttt{\_\_init\_\_} method within a \texttt{torch.no\_grad()} context. 
@@ -39,9 +39,10 @@ The normalized images are
 stored in \texttt{self.proc\_images['norm']}, 
 
 flipped images in \texttt{self.proc\_images['flip']},
-and padded images in \texttt{self.proc\_images['pad']}. During iteration, we only perform the
-dynamic random crop operation on the precomputed padded tensor, and apply epoch-based flipping by
-selecting from precomputed tensors. This eliminates redundant normalization and padding operations
+and padded images in \texttt{self.proc\_images['pad']}. During iteration, we only perform the dynamic
+random crop on the precomputed padded tensor (when translation is enabled). Epoch-based horizontal
+mirroring is implemented by flipping the selected tensor every other epoch, which alternates between
+mirrored and non-mirrored views without per-epoch recomputation. This eliminates redundant normalization and padding operations
 that were previously executed every epoch.
 
 \subsection{Change 2: Residual Connections in ConvGroup}
