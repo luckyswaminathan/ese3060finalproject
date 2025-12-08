@@ -167,13 +167,25 @@ class MLP(nn.Module):
 
     def __init__(self, config):
         super().__init__()
-        self.c_fc    = nn.Linear(config.n_embd, 4 * config.n_embd, bias=False)
-        self.c_proj  = nn.Linear(4 * config.n_embd, config.n_embd, bias=False)
-        self.c_proj.weight.data.zero_() # zero init suggested by @Grad62304977
+        self.n_embd = config.n_embd
+        # use a thinner hidden size (2x instead of 4x) but a gated SwiGLU MLP
+        self.hidden_dim = 2 * self.n_embd  # 2d
+
+        # first linear produces 2 * hidden_dim so we can chunk into (x, gate)
+        # internally we use 2d activation
+        self.c_fc   = nn.Linear(self.n_embd, 2 * self.hidden_dim, bias=False)
+        self.c_proj = nn.Linear(self.hidden_dim, self.n_embd, bias=False)
+
+        # keep zero-init on the output projection
+        self.c_proj.weight.data.zero_()
 
     def forward(self, x):
-        x = self.c_fc(x)
-        x = F.relu(x).square() # https://arxiv.org/abs/2109.08668v2; ~1-2% better than GELU; suggested by @SKYLINEZ007 and @Grad62304977
+        x = self.c_fc(x) # (B, T, 4d)
+        x, gate = x.chunk(2, dim=-1) # each (B, T, 2d)
+
+        # SwiGLU: silu(gate) * x
+        x = F.silu(gate) * x
+
         x = self.c_proj(x)
         return x
 
