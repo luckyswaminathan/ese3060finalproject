@@ -15,6 +15,8 @@
 
 \begin{document}
 
+\vspace*{-0.5em}
+
 % ===================== 1-PAGE REPORT (PAGE 1) =====================
 
 \begin{center}
@@ -70,11 +72,12 @@ stack intact but replaces the 4$d$ ReLU$^2$ MLP with a 2$d$ SwiGLU MLP.
 
 \section{Methodology}
 
-We start from the provided  \texttt{train\_gpt.py} configuration and keep all
-hyperparameters fixed: same model size
-(\texttt{GPTConfig(n\_layer=12, n\_head=6, n\_embd=768)}), global batch size, sequence length
-$T=1024$, optimizers (AdamW for the head and Muon for the transformer blocks), learning rate
-schedule, and number of iterations ($1500$ steps).
+We start from the provided \texttt{train\_gpt.py} configuration. The modified MLP is implemented in
+\texttt{train\_gpt\_swiglu.py} (\url{https://github.com/luckyswaminathan/ese3060finalproject/blob/main/train_gpt_swiglu.py});
+the baseline remains in \texttt{train\_gpt.py}. All hyperparameters are kept fixed: same model size
+(\texttt{GPTConfig(n\_layer=12, n\_head=6, n\_embd=768)}), global batch size, sequence length $T=1024$,
+optimizers (AdamW for the head and Muon for the transformer blocks), learning rate schedule, and
+number of iterations ($1500$ steps).
 
 The only architectural change is in the MLP block:
 
