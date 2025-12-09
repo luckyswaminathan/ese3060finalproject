@@ -2,3 +2,5 @@
 cifar10/
 
 .venv
+
+baseline_gpt_logs/2f3a008f-d1c4-46eb-9d19-bf7997f6488c/state_step005100.pt

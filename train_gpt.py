@@ -10,6 +10,13 @@ from dataclasses import dataclass
 
 import numpy as np
 import torch
+# Check CUDA availability early, before any potential CUDA_VISIBLE_DEVICES modifications
+if not torch.cuda.is_available():
+    cuda_visible = os.environ.get('CUDA_VISIBLE_DEVICES', 'not set')
+    print(f"ERROR: CUDA is not available!")
+    print(f"CUDA_VISIBLE_DEVICES={cuda_visible}")
+    print(f"torch.cuda.device_count()={torch.cuda.device_count()}")
+    sys.exit(1)
 from torch import nn
 import torch.nn.functional as F
 import torch.distributed as dist
@@ -336,7 +343,15 @@ class Hyperparameters:
 args = Hyperparameters()
 
 # set up DDP (distributed data parallel). torchrun sets this env variable
-assert torch.cuda.is_available()
+# Note: CUDA availability was already checked at import time, but verify again here
+# in case CUDA_VISIBLE_DEVICES was modified after import
+if not torch.cuda.is_available():
+    cuda_visible = os.environ.get('CUDA_VISIBLE_DEVICES', 'not set')
+    print(f"ERROR: CUDA became unavailable after import!")
+    print(f"CUDA_VISIBLE_DEVICES={cuda_visible}")
+    print(f"torch.cuda.device_count()={torch.cuda.device_count()}")
+    print("This may happen if CUDA_VISIBLE_DEVICES was modified after PyTorch import.")
+    sys.exit(1)
 dist.init_process_group(backend='nccl')
 ddp_rank = int(os.environ['RANK'])
 ddp_local_rank = int(os.environ['LOCAL_RANK'])
