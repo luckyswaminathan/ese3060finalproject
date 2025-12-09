@@ -1,0 +1,263 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{amsmath}
+\usepackage{booktabs}
+
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1ex plus 0.2ex minus 0.2ex}{0.6ex}
+
+\begin{document}
+
+% ===================== 1-PAGE REPORT (PAGE 1) =====================
+
+\begin{center}
+    {\LARGE\bfseries ESE 3060 Final Project -- Part 2}\\[0.3ex]
+    {\normalsize Ani Petrosyan, Lakshman Swaminathan}\\[0.2ex]
+    {\small December 8, 2025}
+\end{center}
+
+\section{Hypothesis}
+
+The baseline uses a 4$\times$-wide ReLU$^2$ MLP in every transformer block, which is
+computationally heavy but gives good validation loss. Our hypothesis is that we can
+reduce per-step training time by replacing this block with a thinner SwiGLU MLP
+while keeping accuracy roughly unchanged.
+
+What we do is we shrink the MLP hidden dimension from $4d$ to $2d$ and replace the ReLU$^2$
+activation with a gated SwiGLU activation. Prior work on PaLM and LLaMA suggests that
+gated activations like SwiGLU are more expressive per parameter, so we expect the model to
+tolerate a smaller hidden size. If this is true, we should see:
+(1) a measurable speed-up in average step time on GPU, and
+(2) only a small degradation in validation loss at the end of training.
+
+\section{Methodology}
+
+We start from the provided  \texttt{train\_gpt.py} configuration and keep all
+hyperparameters fixed: same model size
+(\texttt{GPTConfig(n\_layer=12, n\_head=6, n\_embd=768)}), global batch size, sequence length
+$T=1024$, optimizers (AdamW for the head and Muon for the transformer blocks), learning rate
+schedule, and number of iterations ($1500$ steps).
+
+The only architectural change is in the MLP block:
+
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Baseline MLP:} one linear layer from $d \rightarrow 4d$, followed by ReLU$^2$,
+          followed by a linear layer from $4d \rightarrow d$.
+    \item \textbf{Modified MLP:} two parallel input projections
+          $W_{1a}, W_{1b} : d \rightarrow 2d$, followed by a SwiGLU gate
+          $\mathrm{SiLU}(W_{1a}x) \odot (W_{1b}x)$, and an output projection
+          $W_2 : 2d \rightarrow d$.
+\end{itemize}
+
+We train both variants on FineWeb-10B shards using a single A100 GPU with
+\texttt{torchrun --nproc\_per\_node=1}. The script logs, for each run:
+
+\begin{itemize}[leftmargin=1.5em]
+    \item average step time (\texttt{step\_avg}, in ms) after discarding warmup steps,
+    \item final validation loss at step 1500,
+    \item peak GPU memory usage.
+\end{itemize}
+
+Due to limited GPU hours, we currently have one run per configuration on A100. In a more complete
+study we would repeat each setting for multiple random seeds and perform a $t$-test on step times
+to formally show statistical significance.
+
+\section{Results \& Conclusions}
+
+On A100, the baseline and SwiGLU-thin models produced the following metrics:
+
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Baseline (ReLU$^2$ MLP):} average step time
+          $\approx 2344.3$ ms, final validation loss $3.5349$,
+          peak memory $31026$ MiB.
+    \item \textbf{SwiGLU--thin MLP:} average step time
+          $\approx 2142.8$ ms, final validation loss $3.5589$,
+          peak memory $28960$ MiB.
+\end{itemize}
+
+This corresponds to an \textbf{$\sim 8.6\%$ reduction} in per-step training time and a
+\textbf{$\sim 2$ GiB drop} in peak memory, at the cost of a small increase in validation loss
+($+0.024$). Given that the whole training setup is identical except for the MLP, this suggests
+that shrinking the MLP and switching to SwiGLU is an effective way to trade a bit of capacity for
+speed and memory efficiency.
+
+To fully analyze the ``sample complexity vs.\ per-step cost'' trade-off discussed in the ModernArch
+paper, we would need longer runs and multiple seeds to compare:
+(1) wall-clock time to reach a target loss and
+(2) number of tokens needed to reach that loss. Our short A100 runs only cover the early part of
+training, but they already show that a pure architectural change in the MLP can yield a clear
+runtime benefit with only a mild accuracy impact. With more compute, the next step would be to
+generate longer training curves and statistically test whether the SwiGLU-thin model catches up
+in loss when trained for more steps.
+
+\newpage
+
+% ===================== APPENDIX (PAGE 2+) =====================
+
+\appendix
+\section{Appendix: SwiGLU--Thin MLP Ablation Details}
+
+\subsection{Change: Replacing ReLU$^2$ MLP With a Thinner SwiGLU Block}
+
+\textbf{Hypothesis.}
+The ModernArch baseline uses a 4$\times$-wide ReLU$^2$ MLP in each transformer block:
+\[
+x \mapsto \mathrm{MLP}_{\text{ReLU}^2}(x)
+    = W_2 \big( \mathrm{ReLU}(W_1 x)^{\circ 2} \big),
+\]
+where $W_1 \in \mathbb{R}^{4d \times d}$ and $W_2 \in \mathbb{R}^{d \times 4d}$.
+This gives good accuracy but is compute-heavy: each block pays for a dense
+$4d \times d$ matmul followed by a $d \times 4d$ matmul.
+
+Our hypothesis is that we can reduce compute while preserving accuracy
+by (1) switching to a gated SwiGLU activation and (2) shrinking the MLP width
+from $4d$ to $2d$. Concretely, we replace the ReLU$^2$ MLP with a SwiGLU block
+of the form
+\[
+x \mapsto \mathrm{MLP}_{\text{SwiGLU}}(x)
+  = W_2 \big( \mathrm{SiLU}(W_{1a} x) \odot (W_{1b} x) \big),
+\]
+where $W_{1a}, W_{1b} \in \mathbb{R}^{2d \times d}$ and $W_2 \in \mathbb{R}^{d \times 2d}$.
+Several recent LLMs use gated activations like SwiGLU, and our intuition is that the
+extra expressivity of the gate can compensate for the smaller hidden dimension.
+
+\textbf{What Changed in Code.}
+In the original \texttt{MLP} class we had:
+\begin{verbatim}
+self.c_fc   = nn.Linear(config.n_embd, 4 * config.n_embd, bias=False)
+self.c_proj = nn.Linear(4 * config.n_embd, config.n_embd, bias=False)
+
+def forward(self, x):
+    x = self.c_fc(x)
+    x = F.relu(x).square()
+    x = self.c_proj(x)
+    return x
+\end{verbatim}
+
+We changed this to a SwiGLU-style MLP with a thinner hidden layer:
+\begin{verbatim}
+class MLP(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        hidden = 2 * config.n_embd
+        self.c_fc_gate = nn.Linear(config.n_embd, hidden, bias=False)
+        self.c_fc_val  = nn.Linear(config.n_embd, hidden, bias=False)
+        self.c_proj    = nn.Linear(hidden, config.n_embd, bias=False)
+        self.c_proj.weight.data.zero_()
+
+    def forward(self, x):
+        gate = F.silu(self.c_fc_gate(x))
+        val  = self.c_fc_val(x)
+        x = gate * val          # SwiGLU-style gated activation
+        x = self.c_proj(x)
+        return x
+\end{verbatim}
+
+No other parts of the architecture (attention, rotary embeddings, optimizer,
+data loader) were modified. All training hyperparameters were kept fixed so that
+we isolate the effect of the MLP change.
+
+\subsection{Experimental Setup}
+
+We follow the official ModernArch training setup but run on an A100 with
+a reduced number of steps:
+
+\begin{itemize}[leftmargin=1.5em]
+    \item Hardware: single NVIDIA A100 (40GB), \texttt{torchrun --nproc\_per\_node=1}.
+    \item Model: \texttt{GPTConfig(n\_layer=12, n\_head=6, n\_embd=768)}.
+    \item Data: FineWeb-10B pre-tokenized shards
+          (\texttt{fineweb\_train\_*.bin}, \texttt{fineweb\_val\_*.bin}).
+    \item Hyperparameters: identical to the provided ModernArch config
+          (global batch size, sequence length $T=1024$, learning rate
+          schedule, Muon + AdamW optimizers).
+    \item Training length: $1500$ iterations (short run suitable for ablations).
+\end{itemize}
+
+Ideally, we would repeat each configuration (baseline and SwiGLU) for
+$N$ independent runs with different random seeds and report:
+mean and standard deviation of step time and validation loss, plus a
+$t$-test to show significance. Here we report the initial single-seed
+results due to GPU constraints.
+
+\subsection{Detailed Results: Runtime, Loss, and Memory}
+
+Table~\ref{tab:swiglu-results} compares the baseline ModernArch MLP to our
+SwiGLU-thin MLP on the A100. ``step\_avg'' is the average training time
+per optimization step reported by the script after discarding the first
+ten warmup steps.
+
+\begin{center}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Model} & \textbf{Avg step time (ms)} & \textbf{Final val loss} & \textbf{Peak memory (MiB)} \\
+        \midrule
+        Baseline ReLU$^2$ MLP & 2344.31 & 3.5349 & 31026 \\
+        SwiGLU--thin MLP      & 2142.81 & 3.5589 & 28960 \\
+        \midrule
+        Relative change        & \textbf{-8.6\%} & +0.024 & \textbf{-2.1 GiB} \\
+        \bottomrule
+    \end{tabular}
+    \caption{Initial ablation results on A100 with 1500 training steps.}
+    \label{tab:swiglu-results}
+\end{table}
+\end{center}
+
+Even with only one run per setting, we already see:
+\begin{itemize}[leftmargin=1.5em]
+    \item An $\approx 8.6\%$ reduction in per-step training time
+          (2344~ms $\rightarrow$ 2143~ms).
+    \item A small increase in validation loss (3.53 $\rightarrow$ 3.56),
+          consistent with the reduced MLP capacity.
+    \item A modest reduction in peak memory usage of about 2~GiB.
+\end{itemize}
+
+\subsection{Relation to Sample Complexity}
+
+The ModernArch records table mainly explores changes that \emph{increase} per-step cost
+but improve sample efficiency (e.g.\ value embeddings, more flexible attention) so that
+the model reaches a target loss in fewer tokens.
+
+Our change goes in the opposite direction: the SwiGLU-thin MLP \emph{reduces} per-step
+compute by shrinking the hidden width from $4d$ to $2d$, at the cost of slightly worse
+loss after a fixed number of steps. To understand whether this is a good trade-off in
+terms of sample complexity, we would:
+
+\begin{enumerate}[leftmargin=1.5em]
+    \item Run longer training curves for both models (e.g.\ 5--10K steps),
+          logging validation loss vs.\ effective tokens seen.
+    \item Plot validation loss as a function of wall-clock time and as a
+          function of total tokens processed.
+    \item Compare ``time to reach a target loss'' between the two models.
+\end{enumerate}
+
+If the SwiGLU-thin model converges to the same loss in fewer tokens while also having
+lower per-step cost, it would improve both sample complexity and wall-clock time. Our
+short runs only show the early part of training, but they demonstrate that the MLP
+change gives a clear step-time benefit.
+
+\subsection{Training Curves}
+
+Figure~\ref{fig:baseline-curve} and Figure~\ref{fig:swiglu-curve} are placeholders
+for training curves generated from the log files (training and validation loss
+versus step or wall-clock time).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{baseline_curve_part2.png}
+    \caption{Baseline ReLU$^2$ MLP: training and validation loss vs.\ step.}
+    \label{fig:baseline-curve}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{swiglu_curve_part2.png}
+    \caption{SwiGLU--thin MLP: training and validation loss vs.\ step.}
+    \label{fig:swiglu-curve}
+\end{figure}
+
+\end{document}
