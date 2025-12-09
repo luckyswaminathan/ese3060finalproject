@@ -5,6 +5,7 @@
 \usepackage{titlesec}
 \usepackage{amsmath}
 \usepackage{hyperref}
+\usepackage{pdfpages}
 
 % Make section headings a bit smaller & tighter
 \titleformat{\section}{\normalsize\bfseries}{\thesection}{0.6em}{}
@@ -63,5 +64,9 @@ These results partially support the hypothesis: the combination of precomputed t
 However, the small accuracy drop suggests there is still a trade-off between speed and performance.
 In future iterations, we would tune the number of epochs and learning rate more finely (or add mild regularization changes) to see if we can recover the lost $\sim$1.2 percentage points while keeping most of the $\sim$5.3\% speed-up.
 
+
+\clearpage
+% Include the appendix PDF after the main 1-page report
+\includepdf[pages=-]{part1appendix.pdf}
 
 \end{document}
