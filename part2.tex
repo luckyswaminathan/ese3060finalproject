@@ -4,6 +4,7 @@
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{booktabs}
 
 \titleformat{\section}{\normalsize\bfseries}{\thesection}{0.6em}{}
@@ -248,15 +249,15 @@ versus step or wall-clock time).
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{baseline_curve_part2.png}
-    \caption{Baseline ReLU$^2$ MLP: training and validation loss vs.\ step.}
+    \includegraphics[width=0.8\textwidth]{baseline_gpt_training.png}
+    \caption{Baseline GPT: training loss (full run, log scale) and validation loss (loss $<4$).}
     \label{fig:baseline-curve}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{swiglu_curve_part2.png}
-    \caption{SwiGLU--thin MLP: training and validation loss vs.\ step.}
+    \includegraphics[width=0.8\textwidth]{swiglu_training.png}
+    \caption{SwiGLU: training loss (full run, log scale) and validation loss (loss $<4$).}
     \label{fig:swiglu-curve}
 \end{figure}
 
