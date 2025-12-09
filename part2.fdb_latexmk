@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1765309484.7018 "/Users/luckyswaminathan/Desktop/ese-3060-project/part2.tex" "part2.pdf" "part2" 1765309485.96265 0
-  "/Users/luckyswaminathan/Desktop/ese-3060-project/part2.tex" 1765309483.15698 11905 29b1e3b4302d81ce66c009a7490555b8 ""
+["pdflatex"] 1765312343.85597 "/Users/luckyswaminathan/Desktop/ese-3060-project/part2.tex" "part2.pdf" "part2" 1765312345.23486 0
+  "/Users/luckyswaminathan/Desktop/ese-3060-project/part2.tex" 1765312342.84013 12937 ff9a5bf47e3e1dc1640fa773c1cb310b ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/tcrm1095.tfm" 1136768653 1536 02c06700a42be0f5a28664c7273f82e7 ""
@@ -73,8 +73,8 @@
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
   "baseline_gpt_training.png" 1765308143.98782 251457 3aef40771f159c778ea833327eb853e9 ""
-  "part2.aux" 1765309485.91141 2376 172298af19b0857f71a5f976806c3304 "pdflatex"
-  "part2.tex" 1765309483.15698 11905 29b1e3b4302d81ce66c009a7490555b8 ""
+  "part2.aux" 1765312345.18262 2476 11f559749baf9fca4dde7812a246a17d "pdflatex"
+  "part2.tex" 1765312342.84013 12937 ff9a5bf47e3e1dc1640fa773c1cb310b ""
   "swiglu_training.png" 1765308143.51996 252803 b09245984954c35a7f30720b36b82995 ""
   (generated)
   "part2.aux"

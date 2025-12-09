@@ -34,6 +34,15 @@ tolerate a smaller hidden size. If this is true, we should see:
 (1) a measurable speed-up in average step time on GPU, and
 (2) only a small degradation in validation loss at the end of training.
 
+\section{Related Work}
+
+Gated linear units (GLUs) improve language modeling by allowing the model to control information flow through learned gates. SwiGLU uses the SiLU (Swish) activation function instead of sigmoid and has been shown to outperform other activation functions. SwiGLU is defined as:
+\[
+\mathrm{SwiGLU}(x) = \mathrm{SiLU}(W_1 x) \odot (W_2 x),
+\]
+where $\mathrm{SiLU}(x) = x \cdot \sigma(x)$ is the Swish activation function. Gated activations provide additional expressivity by allowing the model to learn which features to pass through, while SiLU provides smoother gradients compared to ReLU.
+
+SwiGLU has been widely adopted in large language models like PaLM and LLaMA, demonstrating that it can achieve better performance with fewer parameters compared to traditional ReLU-based MLPs. Our work builds on these findings by testing whether a thinner SwiGLU MLP (with hidden dimension $2d$ instead of $4d$) can match the performance of a wider ReLU$^2$ MLP while reducing per-step training time and memory usage. 
 \section{Methodology}
 
 We start from the provided  \texttt{train\_gpt.py} configuration and keep all
