@@ -190,6 +190,8 @@ SwiGLU-thin MLP on the A100. ``step\_avg'' is the average training time
 per optimization step reported by the script after discarding the first
 ten warmup steps.
 
+
+\subsection{Run 1: Single A100 SXM, 1500 epochs}
 \begin{center}
 \begin{table}[h]
     \centering
@@ -207,6 +209,24 @@ ten warmup steps.
     \label{tab:swiglu-results}
 \end{table}
 \end{center}
+
+\subsection{Run 2: 8 A100 SXMs, 5100 steps}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Model} & \textbf{Avg step time (ms)} & \textbf{Final val loss} & \textbf{Peak memory (MiB)} \\
+        \midrule
+        Baseline ReLU$^2$ MLP & 322.43 & 3.2950 & $\sim$2554 \\
+        SwiGLU--thin MLP      & 296.30 & 3.3268 & $\sim$2386 \\
+        \midrule
+        Relative change        & \textbf{-8.1\%} & +0.0318 & $\sim$-168 MiB \\
+        \bottomrule
+    \end{tabular}
+    \caption{Results on 8 A100 SXMs with 5100 training steps. Peak memory is per-GPU estimate from nvidia-smi.}
+    \label{tab:swiglu-results-run2}
+\end{table}
 
 Even with only one run per setting, we already see:
 \begin{itemize}[leftmargin=1.5em]

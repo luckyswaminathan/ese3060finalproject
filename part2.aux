@@ -6,12 +6,16 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Change: Replacing ReLU$^2$ MLP With a Thinner SwiGLU Block}{3}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Experimental Setup}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {A.3}Detailed Results: Runtime, Loss, and Memory}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}Run 1: Single A100 SXM, 1500 epochs}{4}{}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Initial ablation results on A100 with 1500 training steps.}}{4}{}\protected@file@percent }
-\newlabel{tab:swiglu-results}{{1}{4}{Detailed Results: Runtime, Loss, and Memory}{table.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}Relation to Sample Complexity}{4}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.5}Training Curves}{5}{}\protected@file@percent }
+\newlabel{tab:swiglu-results}{{1}{4}{Run 1: Single A100 SXM, 1500 epochs}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.5}Run 2: 8 A100 SXMs, 5100 steps}{4}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Results on 8 A100 SXMs with 5100 training steps. Peak memory is per-GPU estimate from nvidia-smi.}}{4}{}\protected@file@percent }
+\newlabel{tab:swiglu-results-run2}{{2}{4}{Run 2: 8 A100 SXMs, 5100 steps}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.6}Relation to Sample Complexity}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.7}Training Curves}{5}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Baseline GPT: training loss (full run, log scale) and validation loss (loss $<4$).}}{5}{}\protected@file@percent }
 \newlabel{fig:baseline-curve}{{1}{5}{Training Curves}{figure.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces SwiGLU: training loss (full run, log scale) and validation loss (loss $<4$).}}{5}{}\protected@file@percent }
-\newlabel{fig:swiglu-curve}{{2}{5}{Training Curves}{figure.2}{}}
-\gdef \@abspage@last{5}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces SwiGLU: training loss (full run, log scale) and validation loss (loss $<4$).}}{6}{}\protected@file@percent }
+\newlabel{fig:swiglu-curve}{{2}{6}{Training Curves}{figure.2}{}}
+\gdef \@abspage@last{6}
