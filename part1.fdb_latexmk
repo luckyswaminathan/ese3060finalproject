@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1765244337.23258 "/Users/luckyswaminathan/Desktop/ese-3060-project/part1.tex" "part1.pdf" "part1" 1765244338.09741 0
+["pdflatex"] 1765306861.12039 "/Users/luckyswaminathan/Desktop/ese-3060-project/part1.tex" "part1.pdf" "part1" 1765306861.72586 0
   "/Users/luckyswaminathan/Desktop/ese-3060-project/part1.tex" 1765244336.0967 4503 54eec3717f021e91433a546e75e17b4e ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -91,10 +91,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1756997642 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "part1.aux" 1765244338.04403 496 b6015101f89cb90cfbf0740bee37b639 "pdflatex"
-  "part1.out" 1765244338.04442 348 2413618f7b82eaf78f7b540d8c549c9f "pdflatex"
+  "part1.aux" 1765306861.67087 496 9514a34c7ec6eefd2dfb4d7e31235996 "pdflatex"
+  "part1.out" 1765306861.67124 348 2413618f7b82eaf78f7b540d8c549c9f "pdflatex"
   "part1.tex" 1765244336.0967 4503 54eec3717f021e91433a546e75e17b4e ""
-  "part1appendix.pdf" 1765244336.10924 2449197 db8420b93d46c70240b80b3bf0a597d5 ""
+  "part1appendix.pdf" 1765306859.48074 2969869 79b2ef917e1876f785d51309e99e9cb6 ""
   (generated)
   "part1.aux"
   "part1.log"
