@@ -157,7 +157,7 @@ in loss when trained for more steps.
 \subsection{Change: Replacing ReLU$^2$ MLP With a Thinner SwiGLU Block}
 
 \textbf{Hypothesis.}
-The ModernArch baseline uses a 4$\times$-wide ReLU$^2$ MLP in each transformer block:
+The baseline uses a 4$\times$-wide ReLU$^2$ MLP in each transformer block:
 \[
 x \mapsto \mathrm{MLP}_{\text{ReLU}^2}(x)
     = W_2 \big( \mathrm{ReLU}(W_1 x)^{\circ 2} \big),
@@ -279,11 +279,10 @@ Tables~\ref{tab:swiglu-results} and~\ref{tab:swiglu-results-run2}.
 
 \subsection{Detailed Results: Runtime, Loss, and Memory}
 
-Table~\ref{tab:swiglu-results} compares the baseline ModernArch MLP to our
+Table~\ref{tab:swiglu-results} compares the baseline MLP to our
 SwiGLU-thin MLP on the A100. ``step\_avg'' is the average training time
 per optimization step reported by the script after discarding the first
 ten warmup steps.
-
 
 \subsection{Run 1: Single A100 SXM, 1500 steps}
 \begin{center}
@@ -333,9 +332,7 @@ Even with only one run per setting, we already see:
 
 \subsection{Relation to Sample Complexity}
 
-The ModernArch records table mainly explores changes that increase per-step cost
-but improve sample efficiency (e.g.\ value embeddings, more flexible attention) so that
-the model reaches a target loss in fewer tokens.
+In that big table of 45 records for this particular NanoGPT setup, most of the changes make each training step more expensive, but in return the model needs fewer tokens to reach a given loss.
 
 Our change goes in the opposite direction: the SwiGLU-thin MLP reduces per-step
 compute by shrinking the hidden width from $4d$ to $2d$, at the cost of slightly worse
